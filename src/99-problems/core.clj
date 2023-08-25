@@ -60,7 +60,7 @@
 (my-count '(a b c d e))
 ;; => 5
 
-;; P05 Reverse a list
+;; P05 Reverse a list.
 (defn my-reverse
   ([l] (my-reverse l '()))
   ([l acc]
@@ -73,3 +73,13 @@
 (my-reverse '(a b c d e))
 ;; => (e d c b a)
 
+;; P06 Find oaut whether a list is a palindrome.
+
+(defn palindrome? [l]
+  (= l (my-reverse l))
+  )
+
+(palindrome? '(x a m a x))
+;; => true
+(palindrome? '(r a c e c a r))
+;; => true
