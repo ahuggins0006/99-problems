@@ -59,3 +59,17 @@
 
 (my-count '(a b c d e))
 ;; => 5
+
+;; P05 Reverse a list
+(defn my-reverse
+  ([l] (my-reverse l '()))
+  ([l acc]
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) '()
+       (empty? xs)  (conj acc x)
+       :else (recur xs (conj acc x))))))
+
+(my-reverse '(a b c d e))
+;; => (e d c b a)
+
