@@ -66,7 +66,7 @@
   ([l acc]
    (let [[x & xs :as all] l]
      (cond
-       (empty? all) '()
+       (empty? all) acc 
        (empty? xs)  (conj acc x)
        :else (recur xs (conj acc x))))))
 
@@ -83,3 +83,20 @@
 ;; => true
 (palindrome? '(r a c e c a r))
 ;; => true
+
+;; P07 Flatten a nested list structure.
+
+(defn my-flatten
+  ([l] (my-flatten l '()))
+  ([l acc]
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) (my-reverse acc)
+       (and (list? x) (empty? xs)) (recur x acc)
+       (and (list? x) (empty? x)) (recur xs acc)
+       (and (list? x) (not-empty x)) (recur (list (first x) (rest x) xs) acc)
+       :else (recur xs (conj acc x))))))
+
+(my-flatten '(a (b (c d) e)))
+;; => (a b c d e)
+
