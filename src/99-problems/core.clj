@@ -155,3 +155,20 @@
 
 (encode-modified '(a a a a b c c a a d e e e e))
 ;; => ((4 a) b (2 c) (2 a) d (4 e))
+
+;; P12 Decode a run-length encoded list.
+;; Given a run-length code list generated as specified in problem P11. Construct its uncompressed version.
+
+(defn decode
+  ([l] (decode l '()))
+  ([l acc]
+
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) (my-reverse acc)
+       (not (list? x)) (recur xs (conj acc x))
+       (> (first x) 0) (recur (conj xs (list (dec (first x)) (last x))) (conj acc (last x)))
+       :else (recur xs (conj acc (last x)))))))
+
+(decode '((4 a) b (2 c) (2 a) d (4 e)))
+;; => (a a a a a b c c c a a a d e e e e e)
