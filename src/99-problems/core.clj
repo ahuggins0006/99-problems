@@ -100,3 +100,16 @@
 (my-flatten '(a (b (c d) e)))
 ;; => (a b c d e)
 
+;; P08 Eliminate consecutive duplicates of list elements.
+
+(defn compress
+  ([l] (compress l '()))
+  ([l acc]
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) (reverse acc)
+       (= x (first acc)) (recur xs acc)
+       :else (recur xs (conj acc x))))))
+
+(compress '(a a a a b c c a a d e e e e))
+;; => (a b c a d e)
