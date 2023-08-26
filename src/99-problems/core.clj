@@ -50,7 +50,7 @@
   ([l acc]
   (let [[_ & xs :as all] l]
    (cond
-     (empty? all) '()
+     (empty? all) 0
      (empty? xs)  acc
      :else (recur xs (inc acc))
      )
@@ -167,8 +167,25 @@
      (cond
        (empty? all) (my-reverse acc)
        (not (list? x)) (recur xs (conj acc x))
-       (> (first x) 0) (recur (conj xs (list (dec (first x)) (last x))) (conj acc (last x)))
+       (> (first x) 1) (recur (conj xs (list (dec (first x)) (last x))) (conj acc (last x)))
        :else (recur xs (conj acc (last x)))))))
 
 (decode '((4 a) b (2 c) (2 a) d (4 e)))
-;; => (a a a a a b c c c a a a d e e e e e)
+;; => (a a a a b c c a a d e e e e)
+
+;; P13 Run-length encoding of a list (direct solution).
+;; Implement the so-called run-length encoding data compression method directly. I.e. don't explicitly create the sublists containing the duplicates, as in problem P09, but only count them. As in problem P11, simplify the result list by replacing the singleton lists (1 X) by X.
+
+(defn encode-direct
+  ([l] (encode-direct l '() '() 1))
+  ([l acc accc ctr]
+   (let [[x & xs :as all] l]
+     (println [x xs acc accc ctr])
+     (cond
+       (empty? all) (rest (my-reverse (conj accc (list ctr (first acc)))))
+       (and (not= x (first acc)) (> ctr 1)) (recur xs (conj '() x) (conj accc (list ctr (first acc))) 1)
+       (and (not= x (first acc)) (= ctr 1)) (recur xs (conj '() x) (conj accc (first acc)) 1)
+       :else (recur xs (conj acc x) accc (inc ctr))))))
+
+(encode-direct '(a a a a b c c a a d e e e e))
+;; => ((4 a) b (2 c) (2 a) d (4 e))
