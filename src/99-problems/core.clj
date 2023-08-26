@@ -134,10 +134,24 @@
   ([l] (encode (pack l) '()))
   ([l acc]
    (let [[x & xs :as all] l]
-     (println [x xs acc])
      (cond
        (empty? all) (my-reverse acc)
        :else (recur xs (conj acc (list (my-count x) (first x))))))))
 
 (encode '(a a a a b c c a a d e e e e))
 ;; => ((4 a) (1 b) (2 c) (2 a) (1 d) (4 e))
+
+;; P11 Modified run-length encoding.
+;; Modify the result of problem P10 in such a way that if an element has no duplicates it is simply copied into the result list. Only elements with duplicates are transferred as (N E) lists.
+
+(defn encode-modified
+  ([l] (encode-modified (pack l) '()))
+  ([l acc]
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) (my-reverse acc)
+       (= (my-count x) 1) (recur xs (conj acc (first x)))
+       :else (recur xs (conj acc (list (my-count x) (first x))))))))
+
+(encode-modified '(a a a a b c c a a d e e e e))
+;; => ((4 a) b (2 c) (2 a) d (4 e))
