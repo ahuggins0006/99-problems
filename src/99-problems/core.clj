@@ -107,7 +107,7 @@
   ([l acc]
    (let [[x & xs :as all] l]
      (cond
-       (empty? all) (reverse acc)
+       (empty? all) (my-reverse acc)
        (= x (first acc)) (recur xs acc)
        :else (recur xs (conj acc x))))))
 
@@ -121,9 +121,23 @@
   ([l acc accc]
    (let [[x & xs :as all] l]
      (cond
-       (empty? all) (rest (reverse (conj accc acc)))
+       (empty? all) (rest (my-reverse (conj accc acc)))
        (not= x (first acc)) (recur xs (conj '() x) (conj accc acc))
        :else (recur xs (conj acc x) accc)))))
 
 (pack '(a a a a b c c a a d e e e e))
 ;; => ((a a a a) (b) (c c) (a a) (d) (e e e e))
+
+;; P10 Use the result of problem P09 to implement the so-called run-length encoding data compression method. Consecutive duplicates of elements are encoded as lists (N E) where N is the number of duplicates of the element E.
+
+(defn encode
+  ([l] (encode (pack l) '()))
+  ([l acc]
+   (let [[x & xs :as all] l]
+     (println [x xs acc])
+     (cond
+       (empty? all) (my-reverse acc)
+       :else (recur xs (conj acc (list (my-count x) (first x))))))))
+
+(encode '(a a a a b c c a a d e e e e))
+;; => ((4 a) (1 b) (2 c) (2 a) (1 d) (4 e))
