@@ -113,3 +113,17 @@
 
 (compress '(a a a a b c c a a d e e e e))
 ;; => (a b c a d e)
+
+;; P09 Pack consecutive duplicates of list elements into sublists.
+
+(defn pack
+  ([l] (pack l '() '()))
+  ([l acc accc]
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) (rest (reverse (conj accc acc)))
+       (not= x (first acc)) (recur xs (conj '() x) (conj accc acc))
+       :else (recur xs (conj acc x) accc)))))
+
+(pack '(a a a a b c c a a d e e e e))
+;; => ((a a a a) (b) (c c) (a a) (d) (e e e e))
