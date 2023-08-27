@@ -308,7 +308,6 @@
   ([som l n] (insert-at som l (dec n) '()))
   ([som l n acc]
    (let [[x & xs :as all] l]
-     (println [x xs n acc])
      (cond
        (empty? all) (reverse acc)
        (zero? n) (recur som xs (dec n) (conj acc som x))
@@ -318,3 +317,20 @@
 ;; => (a alfa b c d)
 (= (insert-at 'alfa '(a b c d) 2) '(a alfa b c d))
 ;; => true
+
+;; P22 Create a list containing all integers within a given range
+;; If first argument is smaller than second, produce a list in decreasing order.
+(defn my-range
+  ([i k] (my-range i k '()))
+  ([i k acc]
+   (println [i k acc])
+   (cond
+     (= i k) (my-reverse (conj acc i))
+     (> i k) (recur (dec i) k (conj acc i))
+     :else (recur (inc i) k (conj acc i)))))
+
+(my-range 4 9)
+;; => (4 5 6 7 8 9)
+
+(my-range 9 4)
+;; => (9 8 7 6 5 4)
