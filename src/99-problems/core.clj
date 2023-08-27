@@ -222,3 +222,20 @@
 
 (repli '(a b c) 3)
 ;; => (a a a b b b c c c)
+
+;; P16 Drop every n'th element from a list
+
+(defn my-drop
+  ([l n] (my-drop l n '() (dec n)))
+  ([l n acc count]
+   (let [[x & xs :as all] l]
+     (println [x xs acc n count])
+     (cond
+       (empty? all) (my-reverse acc)
+       (zero? count) (recur xs n acc (dec n))
+       :else (recur xs n (conj acc x) (dec count))))))
+
+(my-drop '(a b c d e f g h i k) 3)
+;; => (a b d e g h k)
+(= (my-drop '(a b c d e f g h i k) 3) '(a b d e g h k))
+;; => true
