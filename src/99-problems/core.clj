@@ -203,3 +203,22 @@
 
 (dupli '(a b c c d))
 ;; => (a a b b c c c c d d)
+
+;; P15 Repilcate the elements of a list of a given number of times.
+
+;; Example:
+;; * (repli '(a b c) 3)
+;; (A A A B B B C C C)
+
+(defn repli
+  ([l n] (repli l n '() n))
+  ([l n acc count]
+   (let [[x & xs :as all] l]
+     (println [x xs acc n count])
+     (cond
+       (empty? all) (my-reverse acc)
+       (zero? count) (recur xs n acc n)
+       :else (recur all n (conj acc x) (dec count))))))
+
+(repli '(a b c) 3)
+;; => (a a a b b b c c c)
