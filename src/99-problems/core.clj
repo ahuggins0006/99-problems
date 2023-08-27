@@ -73,7 +73,7 @@
 (my-reverse '(a b c d e))
 ;; => (e d c b a)
 
-;; P06 Find oaut whether a list is a palindrome.
+;; P06 Find out whether a list is a palindrome.
 
 (defn palindrome? [l]
   (= l (my-reverse l))
@@ -258,8 +258,7 @@
 (defn my-slice
   ([l i k] (my-slice l (dec i) (inc (- k i)) '()))
   ([l i k acc]
-   (let [[x & xs :as all] l]
-     (cond
+   (let [[x & xs :as all] l] (cond
        (empty? all) (my-reverse acc)
        (and (zero? i) (zero? k)) (recur '() i k acc)
        (zero? i) (recur xs i (dec k) (conj acc x))
@@ -275,7 +274,7 @@
 (defn my-rotate [l n]
   (if (pos? n)
     (my-flatten (my-reverse (my-split l n)))
-    (my-flatten (my-reverse (my-split l (+ (count l) n))))))
+    (my-flatten (my-reverse (my-split l (+ (my-count l) n))))))
 
 (my-rotate '(a b c d e f g h) 3)
 ;; => (d e f g h a b c)
@@ -284,4 +283,21 @@
 (my-rotate '(a b c d e f g h) -2)
 ;; => (g h a b c d e f)
 (= (my-rotate '(a b c d e f g h) -2) '(g h a b c d e f))
+;; => true
+
+;; P20 Remove the k'th element from a list.
+;;
+
+(defn remove-at
+  ([l n] (remove-at l (dec n) '()))
+  ([l n acc]
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) (reverse acc)
+       (zero? n) (recur xs (dec n) acc)
+       :else (recur xs (dec n) (conj acc x))))))
+
+(remove-at '(a b c d) 2)
+;; => (a c d)
+(= (remove-at '(a b c d) 2) '(a c d))
 ;; => true
