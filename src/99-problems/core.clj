@@ -269,3 +269,19 @@
 ;; => (c d e f g)
 (= (my-slice '(a b c d e f g h i k) 3 7) '(c d e f g))
 ;; => true
+
+;; P19 Rotate a list N places to the left.
+
+(defn my-rotate [l n]
+  (if (pos? n)
+    (my-flatten (my-reverse (my-split l n)))
+    (my-flatten (my-reverse (my-split l (+ (count l) n))))))
+
+(my-rotate '(a b c d e f g h) 3)
+;; => (d e f g h a b c)
+(= (my-rotate '(a b c d e f g h) 3) '(d e f g h a b c))
+;; => true
+(my-rotate '(a b c d e f g h) -2)
+;; => (g h a b c d e f)
+(= (my-rotate '(a b c d e f g h) -2) '(g h a b c d e f))
+;; => true
