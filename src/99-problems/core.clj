@@ -361,3 +361,14 @@
 ;; => (38 9 41 21 12 15)
 (= (lotto-select 6 49) '(23 1 17 33 21 37))
 ;; => false
+
+;; P25 Generate a random permutation of the elements of a list
+;; Example:
+;; *(rnd-permu '(a b c d e f))
+;; (B A D C E F)
+
+(defn rnd-permu [l]
+  (rnd-select l (my-count l))
+  )
+
+(rnd-permu '(a b c d e f));; => (c d a e f b)
