@@ -301,3 +301,20 @@
 ;; => (a c d)
 (= (remove-at '(a b c d) 2) '(a c d))
 ;; => true
+
+;; P21 Insert an element at a given position into a list
+
+(defn insert-at
+  ([som l n] (insert-at som l (dec n) '()))
+  ([som l n acc]
+   (let [[x & xs :as all] l]
+     (println [x xs n acc])
+     (cond
+       (empty? all) (reverse acc)
+       (zero? n) (recur som xs (dec n) (conj acc som x))
+       :else (recur som xs (dec n) (conj acc x))))))
+
+(insert-at 'alfa '(a b c d) 2)
+;; => (a alfa b c d)
+(= (insert-at 'alfa '(a b c d) 2) '(a alfa b c d))
+;; => true
