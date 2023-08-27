@@ -323,7 +323,6 @@
 (defn my-range
   ([i k] (my-range i k '()))
   ([i k acc]
-   (println [i k acc])
    (cond
      (= i k) (my-reverse (conj acc i))
      (> i k) (recur (dec i) k (conj acc i))
@@ -333,4 +332,19 @@
 ;; => (4 5 6 7 8 9)
 
 (my-range 9 4)
-;; => (9 8 7 6 5 4)
+
+;; P23 Extract a given number of randomly selected elements from a list.
+;; The selected items shall be returned in a list.
+;; Example:
+;; * (rnd-select '(a b c d e f g h) 3)
+(defn rnd-select
+  ([l n] (rnd-select l n '()))
+  ([l n acc]
+   (let [rando (inc (rand-int (my-count l)))]
+     (cond
+       (zero? n) (my-reverse acc)
+       :else (recur (remove-at l rando) (dec n) (conj acc (element-at l rando)))))))
+
+(rnd-select '(a b c d e f g h) 3)
+;; => (e d b)
+
