@@ -348,3 +348,16 @@
 (rnd-select '(a b c d e f g h) 3)
 ;; => (e d b)
 
+;; P24 Lotto: Draw N different random numbers from the set 1..M.
+;; The selected numbers shall be returned in a list.
+;; Example:
+;; *(lotto-select 6 49)
+;; (23 1 17 33 21 37)
+
+(defn lotto-select [i m]
+  (rnd-select (my-range 1 m) i))
+
+(lotto-select 6 49)
+;; => (38 9 41 21 12 15)
+(= (lotto-select 6 49) '(23 1 17 33 21 37))
+;; => false
