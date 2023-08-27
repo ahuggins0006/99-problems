@@ -242,7 +242,6 @@
   ([l n] (my-split l n '()))
   ([l n acc]
    (let [[x & xs :as all] l]
-     (println [x xs acc n])
      (cond
        (empty? all) (my-reverse acc)
        (zero? n) (list (my-reverse acc) (conj xs x))
@@ -251,4 +250,22 @@
 (my-split '(a b c d e f g h i k) 3)
 ;; => ((a b c) (d e f g h i k))
 (= (my-split '(a b c d e f g h i k) 3) '((a b c) (d e f g h i k)))
+;; => true
+
+;; P18 Extract a slice from a list.
+;; Given two indices, I and K, the slice is the list containing the elements between the I'th and K'th element of the original list (both limits included). Start counting the elements with 1.
+
+(defn my-slice
+  ([l i k] (my-slice l (dec i) (inc (- k i)) '()))
+  ([l i k acc]
+   (let [[x & xs :as all] l]
+     (cond
+       (empty? all) (my-reverse acc)
+       (and (zero? i) (zero? k)) (recur '() i k acc)
+       (zero? i) (recur xs i (dec k) (conj acc x))
+       :else (recur xs (dec i) k acc)))))
+
+(my-slice '(a b c d e f g h i k) 3 7)
+;; => (c d e f g)
+(= (my-slice '(a b c d e f g h i k) 3 7) '(c d e f g))
 ;; => true
