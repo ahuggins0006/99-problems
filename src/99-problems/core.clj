@@ -189,3 +189,17 @@
 
 (encode-direct '(a a a a b c c a a d e e e e))
 ;; => ((4 a) b (2 c) (2 a) d (4 e))
+
+;; P14 Duplicate the elements of a list.
+
+(defn dupli
+  ([l] (dupli l '()))
+  ([l acc]
+   (let [[x & xs :as all] l]
+     (println [x xs acc])
+     (cond
+       (empty? all) (my-reverse acc)
+       :else (recur xs (conj acc x x))))))
+
+(dupli '(a b c c d))
+;; => (a a b b c c c c d d)
