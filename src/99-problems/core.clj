@@ -180,7 +180,6 @@
   ([l] (encode-direct l '() '() 1))
   ([l acc accc ctr]
    (let [[x & xs :as all] l]
-     (println [x xs acc accc ctr])
      (cond
        (empty? all) (rest (my-reverse (conj accc (list ctr (first acc)))))
        (and (not= x (first acc)) (> ctr 1)) (recur xs (conj '() x) (conj accc (list ctr (first acc))) 1)
@@ -196,7 +195,6 @@
   ([l] (dupli l '()))
   ([l acc]
    (let [[x & xs :as all] l]
-     (println [x xs acc])
      (cond
        (empty? all) (my-reverse acc)
        :else (recur xs (conj acc x x))))))
@@ -214,7 +212,6 @@
   ([l n] (repli l n '() n))
   ([l n acc count]
    (let [[x & xs :as all] l]
-     (println [x xs acc n count])
      (cond
        (empty? all) (my-reverse acc)
        (zero? count) (recur xs n acc n)
@@ -229,7 +226,6 @@
   ([l n] (my-drop l n '() (dec n)))
   ([l n acc count]
    (let [[x & xs :as all] l]
-     (println [x xs acc n count])
      (cond
        (empty? all) (my-reverse acc)
        (zero? count) (recur xs n acc (dec n))
@@ -238,4 +234,21 @@
 (my-drop '(a b c d e f g h i k) 3)
 ;; => (a b d e g h k)
 (= (my-drop '(a b c d e f g h i k) 3) '(a b d e g h k))
+;; => true
+
+;; P17 Split a list into two parts; the length of the first part is given.
+
+(defn my-split
+  ([l n] (my-split l n '()))
+  ([l n acc]
+   (let [[x & xs :as all] l]
+     (println [x xs acc n])
+     (cond
+       (empty? all) (my-reverse acc)
+       (zero? n) (list (my-reverse acc) (conj xs x))
+       :else (recur xs (dec n) (conj acc x))))))
+
+(my-split '(a b c d e f g h i k) 3)
+;; => ((a b c) (d e f g h i k))
+(= (my-split '(a b c d e f g h i k) 3) '((a b c) (d e f g h i k)))
 ;; => true
