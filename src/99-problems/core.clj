@@ -372,3 +372,37 @@
   )
 
 (rnd-permu '(a b c d e f));; => (c d a e f b)
+
+;; P26 Generate the combinations of K distinct object chosen from the N elements of a list
+
+(defn combination
+  ([n l] (cond
+          (> n 1)   (concat (combination (dec n) l '() '() l) (combination (dec n) (my-reverse l) '() '() (my-reverse l)))
+          (= n 1)   l
+          (zero? n) 1
+          (< n 1)   0
+          ))
+  ([n l acc accc orig]
+
+   (let [[x & xs :as all] l]
+     (println [x xs acc accc orig n])
+     (cond
+       (empty? orig) (my-reverse accc)
+       (empty? all)  (recur n (rest orig) '() accc (rest orig))
+       (= (my-count acc) n) (recur n xs acc (conj accc (my-reverse (conj acc x))) orig)
+       :else (recur n xs (conj acc x) accc orig)))))
+
+(combination 3 '(a b c d e f))
+;; => ((a b c) (a b d) (a b e) (a b f) (b c d) (b c e) (b c f) (c d e) (c d f) (d e f) (f e d) (f e c) (f e b) (f e a) (e d c) (e d b) (e d a) (d c b) (d c a) (c b a))
+
+(combination 5 '(a b c d e f))
+;; => ((a b c d e) (a b c d f) (b c d e f) (f e d c b) (f e d c a) (e d c b a))
+
+(combination 1 '(a b c d e f))
+;; => (a b c d e f)
+
+(combination 0 '(a b c d e f))
+;; => 1
+
+(combination -1 '(a b c d e f))
+;; => 0
