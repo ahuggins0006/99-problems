@@ -385,7 +385,6 @@
   ([n l acc accc orig]
 
    (let [[x & xs :as all] l]
-     (println [x xs acc accc orig n])
      (cond
        (empty? orig) (my-reverse accc)
        (empty? all)  (recur n (rest orig) '() accc (rest orig))
@@ -406,3 +405,27 @@
 
 (combination -1 '(a b c d e f))
 ;; => 0
+
+;; P27 Group the elements of a set into disjoint subsets.
+;; a) In how many ways can a group of 9 people work in 3 disjoint subgroups of 2, 3 and 4 persons? Write a function that generates all the possibilities and returns them in a list.
+;; Example:
+;; * (group3 '(aldo beat carla david evi flip gary hugo ida))
+;; b) Generalize the above function in a way that we can specify a list of group sizes and the funtion will return a list of groups.
+
+
+(defn group
+  ([l counts] (group (reverse l) '() '() '() counts (reverse l) counts))
+  ([l acc accc acccc counts orig-l orig-counts]
+   (let [[x & xs :as all] l
+         [c & cts :as counts] counts]
+     (cond
+       (and (> (count acccc) 1) (= (first acccc) (last acccc))) (reverse (rest acccc))
+       (empty? all) (recur (concat (rest orig-l) (list (first orig-l))) '() '() (conj acccc (reverse (conj accc (reverse acc)))) orig-counts (concat (rest orig-l) (list (first orig-l))) orig-counts)
+       (= (count acc) c) (recur all '() (conj accc (reverse acc)) acccc cts orig-l orig-counts)
+       :else (recur xs (conj acc x) accc acccc counts orig-l orig-counts)))))
+
+(group '(aldo beat carla david evi flip gary hugo ida) '(2 3 4))
+;; => (((aldo beat) (carla david evi) (flip gary hugo ida)) ((beat carla) (david evi flip) (gary hugo ida aldo)) ((carla david) (evi flip gary) (hugo ida aldo beat)) ((david evi) (flip gary hugo) (ida aldo beat carla)) ((evi flip) (gary hugo ida) (aldo beat carla david)) ((flip gary) (hugo ida aldo) (beat carla david evi)) ((gary hugo) (ida aldo beat) (carla david evi flip)) ((hugo ida) (aldo beat carla) (david evi flip gary)) ((ida aldo) (beat carla david) (evi flip gary hugo)))
+
+
+
